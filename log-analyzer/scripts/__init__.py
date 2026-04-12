@@ -2,6 +2,7 @@
 import os
 import importlib
 from pathlib import Path
+from scripts.base_parser import BaseParser
 
 def load_parsers():
     """加载所有解析器"""
