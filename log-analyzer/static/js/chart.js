@@ -1,11 +1,11 @@
 // static/js/chart.js
 
-// ECharts warm theme configuration
+// ECharts cream theme configuration
 const darkTheme = {
     color: [
-        '#e8a648', '#d4763a', '#e87b5e', '#c45c3a',
-        '#d4a84b', '#f0b88a', '#8b6f47', '#b8956a',
-        '#c97850', '#ddaa70', '#e69060', '#c07858'
+        '#8b6f47', '#a67c52', '#b5651d', '#c17a54',
+        '#7a6b4e', '#9a8567', '#c9a86c', '#b8956a',
+        '#a67c39', '#c9a060', '#b88050', '#c9956a'
     ],
     backgroundColor: 'transparent',
     textStyle: {
@@ -13,71 +13,71 @@ const darkTheme = {
     },
     title: {
         textStyle: {
-            color: '#f5ebe0',
+            color: '#3d3630',
             fontWeight: 600
         },
         subtextStyle: {
-            color: '#b8a88a'
+            color: '#6b635a'
         }
     },
     legend: {
         textStyle: {
-            color: '#b8a88a',
+            color: '#6b635a',
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: 11
         },
         pageTextStyle: {
-            color: '#b8a88a'
+            color: '#6b635a'
         }
     },
     tooltip: {
-        backgroundColor: 'rgba(42, 33, 28, 0.95)',
-        borderColor: '#4a3d30',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        borderColor: '#d4ccc0',
         borderWidth: 1,
         textStyle: {
-            color: '#f5ebe0',
+            color: '#3d3630',
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: 12
         }
     },
     toolbox: {
         iconStyle: {
-            borderColor: '#b8a88a'
+            borderColor: '#6b635a'
         },
         emphasis: {
             iconStyle: {
-                borderColor: '#e8a648'
+                borderColor: '#8b6f47'
             }
         }
     },
     dataZoom: {
-        backgroundColor: '#322822',
-        borderColor: '#4a3d30',
-        fillerColor: 'rgba(232, 166, 72, 0.1)',
-        handleColor: '#e8a648',
+        backgroundColor: '#e0d8cc',
+        borderColor: '#d4ccc0',
+        fillerColor: 'rgba(139, 111, 71, 0.1)',
+        handleColor: '#8b6f47',
         handleSize: '100%',
         textStyle: {
-            color: '#b8a88a'
+            color: '#6b635a'
         }
     },
     xAxis: {
         axisLine: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisTick: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisLabel: {
-            color: '#b8a88a',
+            color: '#6b635a',
             fontFamily: 'JetBrains Mono, monospace'
         },
         splitLine: {
             lineStyle: {
-                color: '#322822',
+                color: '#e0d8cc',
                 type: 'dashed'
             }
         }
@@ -85,21 +85,21 @@ const darkTheme = {
     yAxis: {
         axisLine: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisTick: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisLabel: {
-            color: '#b8a88a',
+            color: '#6b635a',
             fontFamily: 'JetBrains Mono, monospace'
         },
         splitLine: {
             lineStyle: {
-                color: '#322822',
+                color: '#e0d8cc',
                 type: 'dashed'
             }
         }
@@ -107,20 +107,20 @@ const darkTheme = {
     categoryAxis: {
         axisLine: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisTick: {
             lineStyle: {
-                color: '#4a3d30'
+                color: '#d4ccc0'
             }
         },
         axisLabel: {
-            color: '#b8a88a'
+            color: '#6b635a'
         },
         splitLine: {
             lineStyle: {
-                color: '#322822',
+                color: '#e0d8cc',
                 type: 'dashed'
             }
         }
@@ -140,8 +140,8 @@ const darkTheme = {
     },
     graph: {
         color: [
-            '#e8a648', '#d4763a', '#e87b5e', '#c45c3a',
-            '#d4a84b', '#f0b88a', '#8b6f47', '#b8956a'
+            '#8b6f47', '#a67c52', '#b5651d', '#c17a54',
+            '#7a6b4e', '#9a8567', '#c9a86c', '#b8956a'
         ]
     }
 };
@@ -165,11 +165,11 @@ class ChartManager {
                     left: 'center',
                     top: 'center',
                     textStyle: {
-                        color: '#7a6a56',
+                        color: '#9a928a',
                         fontSize: 18
                     },
                     subtextStyle: {
-                        color: '#7a6a56',
+                        color: '#9a928a',
                         fontSize: 14
                     }
                 },
@@ -188,7 +188,7 @@ class ChartManager {
             showSymbol: false,
             lineStyle: {
                 width: 2,
-                shadowColor: 'rgba(232, 166, 72, 0.3)',
+                shadowColor: 'rgba(139, 111, 71, 0.3)',
                 shadowBlur: 4
             },
             emphasis: {
@@ -205,25 +205,28 @@ class ChartManager {
             title: {
                 text: '日志计数趋势图',
                 left: 'center',
-                top: 10
+                top: 10,
+                textStyle: {
+                    color: '#3d3630'
+                }
             },
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: 'rgba(42, 33, 28, 0.95)',
-                borderColor: '#4a3d30',
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderColor: '#d4ccc0',
                 borderWidth: 1,
                 textStyle: {
-                    color: '#f5ebe0',
+                    color: '#3d3630',
                     fontFamily: 'JetBrains Mono, monospace',
                     fontSize: 12
                 },
                 axisPointer: {
                     type: 'cross',
                     crossStyle: {
-                        color: '#6b5545'
+                        color: '#b8aea0'
                     },
                     lineStyle: {
-                        color: '#6b5545'
+                        color: '#b8aea0'
                     }
                 },
                 formatter: function(params) {
@@ -241,12 +244,12 @@ class ChartManager {
                 orient: 'horizontal',
                 bottom: 10,
                 textStyle: {
-                    color: '#b8a88a',
+                    color: '#6b635a',
                     fontFamily: 'JetBrains Mono, monospace',
                     fontSize: 11
                 },
                 pageTextStyle: {
-                    color: '#b8a88a'
+                    color: '#6b635a'
                 },
                 data: Object.keys(series)
             },
@@ -274,11 +277,11 @@ class ChartManager {
                     }
                 },
                 iconStyle: {
-                    borderColor: '#b8a88a'
+                    borderColor: '#6b635a'
                 },
                 emphasis: {
                     iconStyle: {
-                        borderColor: '#e8a648'
+                        borderColor: '#8b6f47'
                     }
                 },
                 right: 20
@@ -295,14 +298,14 @@ class ChartManager {
                     end: 100,
                     height: 20,
                     bottom: 60,
-                    borderColor: '#4a3d30',
-                    backgroundColor: '#322822',
-                    fillerColor: 'rgba(232, 166, 72, 0.15)',
+                    borderColor: '#d4ccc0',
+                    backgroundColor: '#e0d8cc',
+                    fillerColor: 'rgba(139, 111, 71, 0.15)',
                     handleStyle: {
-                        color: '#e8a648'
+                        color: '#8b6f47'
                     },
                     textStyle: {
-                        color: '#b8a88a'
+                        color: '#6b635a'
                     }
                 }
             ],
@@ -312,16 +315,16 @@ class ChartManager {
                 data: timePoints,
                 axisLine: {
                     lineStyle: {
-                        color: '#4a3d30'
+                        color: '#d4ccc0'
                     }
                 },
                 axisTick: {
                     lineStyle: {
-                        color: '#4a3d30'
+                        color: '#d4ccc0'
                     }
                 },
                 axisLabel: {
-                    color: '#b8a88a',
+                    color: '#6b635a',
                     fontFamily: 'JetBrains Mono, monospace',
                     fontSize: 11,
                     rotate: 30,
@@ -332,27 +335,27 @@ class ChartManager {
                 type: 'value',
                 name: '计数',
                 nameTextStyle: {
-                    color: '#b8a88a',
+                    color: '#6b635a',
                     padding: [0, 0, 0, 40]
                 },
                 axisLine: {
                     lineStyle: {
-                        color: '#4a3d30'
+                        color: '#d4ccc0'
                     }
                 },
                 axisTick: {
                     lineStyle: {
-                        color: '#4a3d30'
+                        color: '#d4ccc0'
                     }
                 },
                 axisLabel: {
-                    color: '#b8a88a',
+                    color: '#6b635a',
                     fontFamily: 'JetBrains Mono, monospace',
                     fontSize: 11
                 },
                 splitLine: {
                     lineStyle: {
-                        color: '#322822',
+                        color: '#e0d8cc',
                         type: 'dashed'
                     }
                 }
