@@ -5,12 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadBtn = document.getElementById('uploadBtn');
     const status = document.getElementById('status');
     const statusIndicator = document.getElementById('statusIndicator');
-    const filters = document.getElementById('filters');
-    const instanceSelect = document.getElementById('instanceSelect');
-    const metricSelect = document.getElementById('metricSelect');
-    const updateChartBtn = document.getElementById('updateChartBtn');
-    const selectAllBtn = document.getElementById('selectAllBtn');
-    const clearAllBtn = document.getElementById('clearAllBtn');
+    const dataSelection = document.getElementById('dataSelection');
+    const treeContent = document.getElementById('treeContent');
+    const treeSearch = document.getElementById('treeSearch');
+    const selectedItems = document.getElementById('selectedItems');
+    const selectionInfo = document.getElementById('selectionInfo');
     const dropZone = document.getElementById('dropZone');
     const dataCount = document.getElementById('dataCount');
 
@@ -19,6 +18,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let chartManager = null;
     let interactions = null;
     let uploadedFiles = [];
+
+    // Store all combos and selected state: { "instance__metric": true/false }
+    let selectedCombos = {};
+    // Store diff state for each combo: { "instance__metric": true/false }
+    let diffStates = {};
+    // Default to use diff
+    let useDiff = true;
+    // Store the tree structure
+    let treeData = {};
 
     // Drag and drop handling
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -48,14 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const dt = e.dataTransfer;
         const files = dt.files;
         if (files.length > 0) {
-            // 创建一个新的 DataTransfer 来设置 files
             const dataTransfer = new DataTransfer();
             for (let i = 0; i < files.length; i++) {
                 dataTransfer.items.add(files[i]);
             }
             fileInput.files = dataTransfer.files;
             updateFileList(files);
-            // 拖拽文件后自动开始上传
             uploadBtn.click();
         }
     }
@@ -84,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fileInput.addEventListener('change', function() {
         if (this.files.length > 0) {
             updateFileList(this.files);
-            // 选择文件后自动开始上传
             uploadBtn.click();
         }
     });
@@ -143,31 +148,30 @@ document.addEventListener('DOMContentLoaded', function() {
             dataProcessor = new DataProcessor();
             dataProcessor.setData(processResult.csv_data);
 
-            // Populate filters
-            const instances = dataProcessor.getInstances();
-            const metrics = dataProcessor.getMetrics();
+            // Build tree structure from data
+            treeData = buildTreeData(dataProcessor.data);
 
-            instanceSelect.innerHTML = '';
-            metricSelect.innerHTML = '';
-
-            instances.forEach(inst => {
-                const option = document.createElement('option');
-                option.value = inst;
-                option.textContent = inst;
-                option.selected = true;
-                instanceSelect.appendChild(option);
+            // Initialize selected state (none selected by default)
+            Object.keys(treeData).forEach(instance => {
+                treeData[instance].metrics.forEach(metric => {
+                    const key = `${instance}__${metric}`;
+                    selectedCombos[key] = false;
+                    // Initialize diff state to true (use diff by default)
+                    diffStates[key] = true;
+                });
             });
 
-            metrics.forEach(metric => {
-                const option = document.createElement('option');
-                option.value = metric;
-                option.textContent = metric;
-                option.selected = true;
-                metricSelect.appendChild(option);
+            // 展开所有实例供用户选择
+            Object.keys(treeData).forEach(instance => {
+                treeData[instance].expanded = true;
             });
 
-            // Show filters
-            filters.classList.add('visible');
+            // Render tree and preview
+            renderTree(treeData);
+            updatePreview();
+
+            // Show data selection
+            dataSelection.classList.add('visible');
 
             // Update data count
             const totalData = dataProcessor.data.length;
@@ -187,35 +191,300 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    updateChartBtn.addEventListener('click', updateChart);
+    function buildTreeData(data) {
+        const tree = {};
 
-    selectAllBtn.addEventListener('click', function() {
-        Array.from(instanceSelect.options).forEach(o => o.selected = true);
-        Array.from(metricSelect.options).forEach(o => o.selected = true);
+        data.forEach(d => {
+            const instance = d['实例名称'];
+            const metric = d['计数名称'];
+
+            if (!tree[instance]) {
+                tree[instance] = {
+                    metrics: new Set(),
+                    metricCounts: {},
+                    expanded: true
+                };
+            }
+            tree[instance].metrics.add(metric);
+            // 统计每个 metric 的数量
+            tree[instance].metricCounts[metric] = (tree[instance].metricCounts[metric] || 0) + 1;
+        });
+
+        // Convert Sets to sorted Arrays
+        Object.keys(tree).forEach(instance => {
+            tree[instance].metrics = Array.from(tree[instance].metrics).sort();
+        });
+
+        return tree;
+    }
+
+    function renderTree(data, filter = '') {
+        const filterLower = filter.toLowerCase();
+        const instances = Object.keys(data).sort();
+
+        let html = '';
+
+        instances.forEach(instance => {
+            // Filter by instance name
+            if (filter && !instance.toLowerCase().includes(filterLower)) {
+                // Check if any metrics match
+                const matchingMetrics = data[instance].metrics.filter(m => m.toLowerCase().includes(filterLower));
+                if (matchingMetrics.length === 0) return;
+            }
+
+            const metrics = data[instance].metrics;
+            const allSelected = metrics.every(m => selectedCombos[`${instance}__${m}`]);
+            const someSelected = metrics.some(m => selectedCombos[`${instance}__${m}`]);
+
+            let checkboxClass = 'tree-checkbox';
+            if (allSelected) checkboxClass += ' checked';
+            else if (someSelected) checkboxClass += ' indeterminate';
+
+            html += `
+            <div class="tree-node">
+                <div class="tree-instance ${data[instance].expanded ? 'expanded' : ''}" data-instance="${encodeURIComponent(instance)}">
+                    <svg class="tree-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="${checkboxClass}"></span>
+                    <span class="tree-instance-name">${instance}</span>
+                </div>
+                <div class="tree-metrics">
+                    ${metrics.map(metric => {
+                        const key = `${instance}__${metric}`;
+                        const isSelected = selectedCombos[key];
+                        const count = data[instance].metricCounts[metric] || 0;
+                        // Filter by metric name
+                        if (filter && !metric.toLowerCase().includes(filterLower) && !instance.toLowerCase().includes(filterLower)) {
+                            return '';
+                        }
+                        return `
+                        <div class="tree-metric ${isSelected ? 'selected' : ''}" data-combo="${encodeURIComponent(key)}">
+                            <span class="tree-checkbox ${isSelected ? 'checked' : ''}" style="width:14px;height:14px;"></span>
+                            <span>${metric}</span>
+                            <span class="metric-count">(${count}条)</span>
+                        </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+            `;
+        });
+
+        treeContent.innerHTML = html || '<div class="preview-empty">无匹配结果</div>';
+
+        // Add event handlers
+        treeContent.querySelectorAll('.tree-instance').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target.closest('.tree-checkbox')) return;
+
+                const instance = decodeURIComponent(this.dataset.instance);
+                this.classList.toggle('expanded');
+                data[instance].expanded = this.classList.contains('expanded');
+            });
+
+            // Click on checkbox to toggle all metrics
+            const checkbox = el.querySelector('.tree-checkbox');
+            checkbox.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const instance = decodeURIComponent(el.dataset.instance);
+                const allSelected = metrics => metrics.every(m => selectedCombos[`${instance}__${m}`]);
+                const metrics = data[instance].metrics;
+                const newState = !allSelected(metrics);
+
+                metrics.forEach(metric => {
+                    selectedCombos[`${instance}__${metric}`] = newState;
+                });
+
+                renderTree(data, treeSearch.value);
+                updatePreview();
+                updateChart();
+            });
+        });
+
+        treeContent.querySelectorAll('.tree-metric').forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const key = decodeURIComponent(this.dataset.combo);
+                selectedCombos[key] = !selectedCombos[key];
+
+                // Update UI
+                this.classList.toggle('selected');
+                const checkbox = this.querySelector('.tree-checkbox');
+                checkbox.classList.toggle('checked');
+
+                // Update parent instance checkbox state
+                const instance = key.split('__')[0];
+                const metrics = data[instance].metrics;
+                const allSelected = metrics.every(m => selectedCombos[`${instance}__${m}`]);
+                const someSelected = metrics.some(m => selectedCombos[`${instance}__${m}`]);
+
+                const instanceEl = treeContent.querySelector(`.tree-instance[data-instance="${encodeURIComponent(instance)}"]`);
+                const instanceCheckbox = instanceEl.querySelector(':scope > .tree-checkbox');
+                instanceCheckbox.classList.remove('checked', 'indeterminate');
+                if (allSelected) instanceCheckbox.classList.add('checked');
+                else if (someSelected) instanceCheckbox.classList.add('indeterminate');
+
+                updatePreview();
+                updateChart();
+            });
+        });
+    }
+
+    function updatePreview() {
+        const selected = Object.entries(selectedCombos)
+            .filter(([_, isSelected]) => isSelected)
+            .map(([key, _]) => {
+                const [instance, metric] = key.split('__');
+                return { instance, metric, key };
+            });
+
+        // Update info
+        selectionInfo.textContent = `${selected.length} 项`;
+
+        if (selected.length === 0) {
+            selectedItems.innerHTML = '<div class="preview-empty">请从左侧选择数据</div>';
+            return;
+        }
+
+        selectedItems.innerHTML = selected.map(item => `
+            <div class="preview-item" data-combo="${encodeURIComponent(item.key)}">
+                <div class="preview-item-info">
+                    <span class="preview-item-instance">${item.instance}</span>
+                    <span class="preview-item-metric"> / ${item.metric}</span>
+                </div>
+                <label class="preview-item-diff" title="显示差值（与前一时间点的差值）">
+                    <input type="checkbox" ${diffStates[item.key] !== false ? 'checked' : ''} data-diff="${encodeURIComponent(item.key)}">
+                    <span>差值</span>
+                </label>
+                <span class="preview-item-remove">×</span>
+            </div>
+        `).join('');
+
+        // Add remove handlers
+        selectedItems.querySelectorAll('.preview-item').forEach(el => {
+            el.querySelector('.preview-item-remove').addEventListener('click', function() {
+                const key = decodeURIComponent(el.dataset.combo);
+                selectedCombos[key] = false;
+
+                // Update tree
+                renderTree(treeData, treeSearch.value);
+                updatePreview();
+                updateChart();
+            });
+        });
+
+        // Add diff checkbox handlers
+        selectedItems.querySelectorAll('.preview-item-diff input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const key = decodeURIComponent(this.dataset.diff);
+                diffStates[key] = this.checked;
+                updateChart();
+            });
+        });
+    }
+
+    // Tree action buttons
+    document.getElementById('expandAll').addEventListener('click', function() {
+        // 切换展开/折叠状态
+        const isAnyCollapsed = Object.values(treeData).some(instance => !instance.expanded);
+
+        if (isAnyCollapsed) {
+            // 展开所有
+            Object.keys(treeData).forEach(instance => {
+                treeData[instance].expanded = true;
+            });
+        } else {
+            // 折叠所有
+            Object.keys(treeData).forEach(instance => {
+                treeData[instance].expanded = false;
+            });
+        }
+        renderTree(treeData, treeSearch.value);
+    });
+
+    document.getElementById('selectAll').addEventListener('click', function() {
+        // 全选所有计数
+        Object.keys(treeData).forEach(instance => {
+            treeData[instance].metrics.forEach(metric => {
+                selectedCombos[`${instance}__${metric}`] = true;
+            });
+        });
+        renderTree(treeData, treeSearch.value);
+        updatePreview();
         updateChart();
     });
 
-    clearAllBtn.addEventListener('click', function() {
-        Array.from(instanceSelect.options).forEach(o => o.selected = false);
-        Array.from(metricSelect.options).forEach(o => o.selected = false);
+    document.getElementById('clearAll').addEventListener('click', function() {
+        // 清空所有选择
+        Object.keys(selectedCombos).forEach(key => {
+            selectedCombos[key] = false;
+        });
+        renderTree(treeData, treeSearch.value);
+        updatePreview();
         updateChart();
+    });
+
+    // Search handler
+    treeSearch.addEventListener('input', function() {
+        renderTree(treeData, this.value);
     });
 
     function updateChart() {
-        let selectedInstances = Array.from(instanceSelect.selectedOptions).map(o => o.value);
-        let selectedMetrics = Array.from(metricSelect.selectedOptions).map(o => o.value);
+        // Get selected instances and metrics with diff state
+        const selectedData = [];
+        const selectedInstances = new Set();
+        const selectedMetrics = new Set();
 
-        if (selectedInstances.length === 0) {
-            selectedInstances = Array.from(instanceSelect.options).map(o => o.value);
+        Object.entries(selectedCombos).forEach(([key, isSelected]) => {
+            if (isSelected) {
+                const [instance, metric] = key.split('__');
+                selectedInstances.add(instance);
+                selectedMetrics.add(metric);
+                selectedData.push({
+                    key,
+                    instance,
+                    metric,
+                    useDiff: diffStates[key] !== false // default to true
+                });
+            }
+        });
+
+        const instances = Array.from(selectedInstances);
+        const metrics = Array.from(selectedMetrics);
+
+        if (instances.length === 0 || metrics.length === 0) {
+            chartManager.update({ timePoints: [], series: {} });
+            return;
         }
-        if (selectedMetrics.length === 0) {
-            selectedMetrics = Array.from(metricSelect.options).map(o => o.value);
-        }
 
-        const filteredData = dataProcessor.filterData(selectedInstances, selectedMetrics);
-        const chartData = dataProcessor.groupByTime(filteredData);
+        // Get data without diff first
+        const filteredData = dataProcessor.filterData(instances, metrics);
+        const chartData = dataProcessor.groupByTime(filteredData, false);
 
-        chartManager.update(chartData);
+        // Apply diff selectively based on diffStates
+        const { timePoints, series } = chartData;
+        const finalSeries = {};
+
+        Object.keys(series).forEach(key => {
+            const useDiff = diffStates[key] !== false; // default to true
+            if (useDiff) {
+                // Compute diff for this series
+                const values = series[key];
+                finalSeries[key] = [];
+                for (let i = 0; i < values.length; i++) {
+                    if (i === 0) {
+                        finalSeries[key].push(0);
+                    } else {
+                        finalSeries[key].push(values[i] - values[i - 1]);
+                    }
+                }
+            } else {
+                finalSeries[key] = series[key];
+            }
+        });
+
+        chartManager.update({ timePoints, series: finalSeries });
     }
 
     function setStatus(message, type) {

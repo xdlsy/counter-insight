@@ -161,7 +161,7 @@ class ChartManager {
             this.chart.setOption({
                 title: {
                     text: '暂无数据',
-                    subtext: '请先上传日志文件',
+                    subtext: '请先选择要展示的计数',
                     left: 'center',
                     top: 'center',
                     textStyle: {
@@ -173,8 +173,23 @@ class ChartManager {
                         fontSize: 14
                     }
                 },
-                series: []
-            });
+                xAxis: {
+                    data: [],
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
+                },
+                yAxis: {
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
+                },
+                series: [],
+                legend: { show: false },
+                grid: { show: false }
+            }, true); // true = not merge, replace completely
             return;
         }
 

@@ -68,38 +68,62 @@
                 </div>
             </section>
 
-            <!-- Filters Section -->
-            <section class="filters-section card" id="filters" style="display: none;">
+            <!-- Data Selection Section -->
+            <section class="data-selection-section card" id="dataSelection">
                 <div class="card-header">
                     <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                     </svg>
-                    <h2>数据筛选</h2>
+                    <h2>数据选择</h2>
                 </div>
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label>实例名称</label>
-                        <select id="instanceSelect" multiple class="custom-select"></select>
+                <div class="data-selection-layout">
+                    <!-- Left: Tree Selection -->
+                    <div class="selection-tree-panel">
+                        <div class="tree-toolbar">
+                            <div class="tree-search">
+                                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                                <input type="text" id="treeSearch" placeholder="搜索实例或计数...">
+                            </div>
+                            <div class="tree-actions">
+                                <button class="tree-action-btn" id="expandAll" title="展开/折叠">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="tree-action-btn" id="selectAll" title="全选">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 11 12 14 22 4"></polyline>
+                                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                    </svg>
+                                </button>
+                                <button class="tree-action-btn" id="clearAll" title="清空">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tree-content" id="treeContent"></div>
                     </div>
-                    <div class="filter-group">
-                        <label>计数名称</label>
-                        <select id="metricSelect" multiple class="custom-select"></select>
-                    </div>
-                    <div class="filter-actions">
-                        <button class="btn btn-accent" id="updateChartBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="23 4 23 10 17 10"></polyline>
-                                <polyline points="1 20 1 14 7 14"></polyline>
-                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                            </svg>
-                            更新图表
-                        </button>
-                        <button class="btn btn-secondary" id="selectAllBtn">
-                            全选
-                        </button>
-                        <button class="btn btn-secondary" id="clearAllBtn">
-                            清空
-                        </button>
+
+                    <!-- Divider -->
+                    <div class="selection-divider"></div>
+
+                    <!-- Right: Selected Items -->
+                    <div class="selection-preview-panel">
+                        <div class="preview-header">
+                            <span>已选择</span>
+                            <span class="selection-info" id="selectionInfo">0 项</span>
+                        </div>
+                        <div class="preview-items" id="selectedItems">
+                            <div class="preview-empty">请从左侧选择数据</div>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -39,7 +39,10 @@ def upload():
     # 保存上传的文件
     for f in files:
         if f.filename:
-            f.save(os.path.join(upload_dir, f.filename))
+            # 创建子目录（如果有）
+            file_path = os.path.join(upload_dir, f.filename)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            f.save(file_path)
 
     # 如果是单个文件，检查是否需要解压
     if len(files) == 1 and os.path.isfile(os.path.join(upload_dir, files[0].filename)):
@@ -79,9 +82,14 @@ def process_files():
     # 转换为 CSV 格式
     output = io.StringIO()
     if all_results:
-        writer = csv.DictWriter(output, fieldnames=['实例名称', '计数名称', '数值', '时间'])
+        # 清理字段名中的\r字符
+        fieldnames = ['实例名称', '计数名称', '数值', '时间']
+        writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator='\n')
         writer.writeheader()
-        writer.writerows(all_results)
+        for row in all_results:
+            # 清理每行数据
+            clean_row = {k: v.strip() if isinstance(v, str) else v for k, v in row.items()}
+            writer.writerow(clean_row)
 
     csv_data = output.getvalue()
 

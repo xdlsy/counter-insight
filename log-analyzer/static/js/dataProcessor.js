@@ -6,9 +6,10 @@ class DataProcessor {
     }
 
     setData(csvData) {
-        // 解析 CSV
-        const lines = csvData.trim().split('\n');
-        const headers = lines[0].split(',');
+        // 解析 CSV - 清理可能的\r字符
+        const cleanCsvData = csvData.replace(/\r/g, '');
+        const lines = cleanCsvData.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
 
         this.data = [];
         for (let i = 1; i < lines.length; i++) {
@@ -44,7 +45,25 @@ class DataProcessor {
         });
     }
 
-    groupByTime(data) {
+    // 计算差值：将当前值减去前一个时间点的值
+    computeDiff(series) {
+        const diffSeries = {};
+        Object.keys(series).forEach(key => {
+            diffSeries[key] = [];
+            const values = series[key];
+            for (let i = 0; i < values.length; i++) {
+                if (i === 0) {
+                    // 第一个点没有前一个值，设为0或null
+                    diffSeries[key].push(0);
+                } else {
+                    diffSeries[key].push(values[i] - values[i - 1]);
+                }
+            }
+        });
+        return diffSeries;
+    }
+
+    groupByTime(data, useDiff = true) {
         // 按时间分组
         const grouped = {};
         data.forEach(d => {
@@ -80,6 +99,11 @@ class DataProcessor {
                 series[key].push(match ? match['数值'] : 0);
             });
         });
+
+        // 如果需要差值，计算差值
+        if (useDiff) {
+            return { timePoints, series: this.computeDiff(series) };
+        }
 
         return { timePoints, series };
     }
