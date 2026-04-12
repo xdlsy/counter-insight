@@ -2,7 +2,10 @@ from flask import Flask, render_template, request, jsonify
 from config import UPLOAD_FOLDER
 import os
 import uuid
+import csv
+import io
 from utils import process_directory, is_compressed, extract_all
+from scripts import load_parsers
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -42,6 +45,41 @@ def upload():
     return jsonify({
         'session_id': session_id,
         'files': text_files
+    })
+
+@app.route('/process', methods=['POST'])
+def process_files():
+    data = request.json
+    session_id = data.get('session_id')
+    files = data.get('files', [])
+
+    if not files:
+        return jsonify({'error': 'No files to process'}), 400
+
+    # 加载所有解析器
+    parsers = load_parsers()
+
+    # 处理所有文件
+    all_results = []
+    for file_path in files:
+        for parser in parsers:
+            if parser.can_process(file_path):
+                results = parser.process(file_path)
+                all_results.extend(results)
+                break  # 一个文件只用一个解析器处理
+
+    # 转换为 CSV 格式
+    output = io.StringIO()
+    if all_results:
+        writer = csv.DictWriter(output, fieldnames=['实例名称', '计数名称', '数值', '时间'])
+        writer.writeheader()
+        writer.writerows(all_results)
+
+    csv_data = output.getvalue()
+
+    return jsonify({
+        'csv_data': csv_data,
+        'results': all_results
     })
 
 if __name__ == '__main__':

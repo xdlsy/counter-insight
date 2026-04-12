@@ -1,0 +1,27 @@
+# scripts/__init__.py
+import os
+import importlib
+from pathlib import Path
+
+def load_parsers():
+    """加载所有解析器"""
+    parsers = []
+    script_dir = Path(__file__).parent
+
+    for file in script_dir.glob('*_parser.py'):
+        if file.name == 'base_parser.py':
+            continue
+
+        module_name = file.stem
+        module = importlib.import_module(f'scripts.{module_name}')
+
+        for attr_name in dir(module):
+            attr = getattr(module, attr_name)
+            if isinstance(attr, type) and attr.__name__ != 'BaseParser':
+                try:
+                    if issubclass(attr, BaseParser):
+                        parsers.append(attr())
+                except:
+                    pass
+
+    return parsers
