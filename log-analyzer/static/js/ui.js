@@ -2,7 +2,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
-    const fileInputSingle = document.getElementById('fileInputSingle');
     const uploadBtn = document.getElementById('uploadBtn');
     const status = document.getElementById('status');
     const statusIndicator = document.getElementById('statusIndicator');
@@ -49,7 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const dt = e.dataTransfer;
         const files = dt.files;
         if (files.length > 0) {
-            fileInputSingle.files = files;
+            // 创建一个新的 DataTransfer 来设置 files
+            const dataTransfer = new DataTransfer();
+            for (let i = 0; i < files.length; i++) {
+                dataTransfer.items.add(files[i]);
+            }
+            fileInput.files = dataTransfer.files;
             updateFileList(files);
             // 拖拽文件后自动开始上传
             uploadBtn.click();
@@ -77,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // File input change handler
-    fileInputSingle.addEventListener('change', function() {
+    fileInput.addEventListener('change', function() {
         if (this.files.length > 0) {
             updateFileList(this.files);
             // 选择文件后自动开始上传
@@ -86,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     uploadBtn.addEventListener('click', async function() {
-        const files = fileInput.files.length > 0 ? fileInput.files : fileInputSingle.files;
+        const files = fileInput.files;
 
         if (!files || files.length === 0) {
             setStatus('请选择文件', 'error');
