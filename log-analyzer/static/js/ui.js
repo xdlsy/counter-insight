@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (files.length > 0) {
             fileInputSingle.files = files;
             updateFileList(files);
+            // 拖拽文件后自动开始上传
+            uploadBtn.click();
         }
     }
 
