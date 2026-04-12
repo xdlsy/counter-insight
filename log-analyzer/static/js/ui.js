@@ -78,7 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // File input change handler
     fileInputSingle.addEventListener('change', function() {
-        updateFileList(this.files);
+        if (this.files.length > 0) {
+            updateFileList(this.files);
+            // 选择文件后自动开始上传
+            uploadBtn.click();
+        }
     });
 
     uploadBtn.addEventListener('click', async function() {
