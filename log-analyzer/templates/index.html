@@ -1,33 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>日志分析工具</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日志分析工具 | Log Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
-    <h1>日志分析工具</h1>
-    <div id="app">
-        <div class="upload-section">
-            <input type="file" id="fileInput" webkitdirectory multiple>
-            <input type="file" id="fileInputSingle" multiple>
-            <button id="uploadBtn">上传</button>
-            <span id="status"></span>
-        </div>
-
-        <div class="filters" id="filters" style="display:none;">
-            <div class="filter-group">
-                <label>实例名称：</label>
-                <select id="instanceSelect" multiple></select>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span class="logo-text">Log Analyzer</span>
             </div>
-            <div class="filter-group">
-                <label>计数名称：</label>
-                <select id="metricSelect" multiple></select>
-            </div>
-            <button id="updateChartBtn">更新图表</button>
-        </div>
+            <div class="header-subtitle">日志计数可视化分析工具</div>
+        </header>
 
-        <div id="chart" style="width: 100%; height: 500px;"></div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <h2>上传日志文件</h2>
+                </div>
+                <div class="upload-area" id="dropZone">
+                    <input type="file" id="fileInput" webkitdirectory multiple class="file-input">
+                    <input type="file" id="fileInputSingle" multiple class="file-input">
+                    <div class="upload-placeholder">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p class="upload-text">拖拽文件或目录到此处</p>
+                        <p class="upload-hint">支持 .log, .txt, .json 文件及 .zip, .tar.gz 压缩包</p>
+                        <div class="upload-buttons">
+                            <button class="btn btn-primary" id="uploadBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                选择文件
+                            </button>
+                        </div>
+                    </div>
+                    <div class="file-list" id="fileList"></div>
+                </div>
+                <div class="status-bar">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span class="status-text" id="status">等待上传...</span>
+                </div>
+            </section>
+
+            <!-- Filters Section -->
+            <section class="filters-section card" id="filters" style="display: none;">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <h2>数据筛选</h2>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>实例名称</label>
+                        <select id="instanceSelect" multiple class="custom-select"></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>计数名称</label>
+                        <select id="metricSelect" multiple class="custom-select"></select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-accent" id="updateChartBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                            </svg>
+                            更新图表
+                        </button>
+                        <button class="btn btn-secondary" id="selectAllBtn">
+                            全选
+                        </button>
+                        <button class="btn btn-secondary" id="clearAllBtn">
+                            清空
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chart Section -->
+            <section class="chart-section card">
+                <div class="card-header">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <h2>趋势图表</h2>
+                    <span class="chart-badge" id="dataCount">0 条数据</span>
+                </div>
+                <div class="chart-container" id="chart"></div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span>Log Analyzer</span>
+            <span class="separator">|</span>
+            <span>数据驱动洞察</span>
+        </footer>
     </div>
 
     <script src="/static/js/dataProcessor.js"></script>
