@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
+    const fileInputSingle = document.getElementById('fileInputSingle');
     const uploadBtn = document.getElementById('uploadBtn');
     const status = document.getElementById('status');
     const filters = document.getElementById('filters');
@@ -15,7 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let interactions = null;
 
     uploadBtn.addEventListener('click', async function() {
-        const files = fileInput.files;
+        // 支持两种文件输入
+        const files = fileInput.files.length > 0 ? fileInput.files : fileInputSingle.files;
+
         if (!files || files.length === 0) {
             status.textContent = '请选择文件';
             return;
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    session_id: session_id,
+                    session_id: sessionId,
                     files: result.files
                 })
             });
@@ -72,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const metrics = dataProcessor.getMetrics();
 
             instanceSelect.innerHTML = '';
-            metricsSelect.innerHTML = '';
+            metricSelect.innerHTML = '';
 
             instances.forEach(inst => {
                 const option = document.createElement('option');
@@ -107,8 +110,17 @@ document.addEventListener('DOMContentLoaded', function() {
     updateChartBtn.addEventListener('click', updateChart);
 
     function updateChart() {
-        const selectedInstances = Array.from(instanceSelect.selectedOptions).map(o => o.value);
-        const selectedMetrics = Array.from(metricSelect.selectedOptions).map(o => o.value);
+        // 如果没有选择，默认选择所有
+        let selectedInstances = Array.from(instanceSelect.selectedOptions).map(o => o.value);
+        let selectedMetrics = Array.from(metricSelect.selectedOptions).map(o => o.value);
+
+        // 如果没有选中任何选项，选择所有
+        if (selectedInstances.length === 0) {
+            selectedInstances = Array.from(instanceSelect.options).map(o => o.value);
+        }
+        if (selectedMetrics.length === 0) {
+            selectedMetrics = Array.from(metricSelect.options).map(o => o.value);
+        }
 
         const filteredData = dataProcessor.filterData(selectedInstances, selectedMetrics);
         const chartData = dataProcessor.groupByTime(filteredData);
