@@ -59,8 +59,10 @@ class DataProcessor {
         const timePoints = Object.keys(grouped).sort();
         const series = {};
 
+        // 先收集所有唯一的 instance-metric 组合
         data.forEach(d => {
-            const key = `${d['实例名称']}-${d['计数名称']}`;
+            // 使用双下划线作为分隔符，避免与实例名称中的字符冲突
+            const key = `${d['实例名称']}__${d['计数名称']}`;
             if (!series[key]) {
                 series[key] = [];
             }
@@ -69,7 +71,11 @@ class DataProcessor {
         timePoints.forEach(time => {
             const timeData = grouped[time];
             Object.keys(series).forEach(key => {
-                const [instance, metric] = key.split('-');
+                // 还原原始的实例名称和计数名称
+                const parts = key.split('__');
+                const instance = parts[0];
+                const metric = parts[1];
+
                 const match = timeData.find(d => d['实例名称'] === instance && d['计数名称'] === metric);
                 series[key].push(match ? match['数值'] : 0);
             });

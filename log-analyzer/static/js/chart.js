@@ -179,7 +179,8 @@ class ChartManager {
         }
 
         const seriesData = Object.keys(series).map(key => ({
-            name: key,
+            // 将 __ 转换回 - 用于显示
+            name: key.replace('__', '-'),
             type: 'line',
             data: series[key],
             smooth: true,
@@ -251,7 +252,7 @@ class ChartManager {
                 pageTextStyle: {
                     color: '#6b635a'
                 },
-                data: Object.keys(series)
+                data: Object.keys(series).map(k => k.replace('__', '-'))
             },
             grid: {
                 left: '3%',
