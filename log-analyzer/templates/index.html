@@ -3,14 +3,35 @@
 <head>
     <title>日志分析工具</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
     <h1>日志分析工具</h1>
     <div id="app">
-        <input type="file" id="fileInput" webkitdirectory multiple>
-        <button id="uploadBtn">上传</button>
-        <div id="result"></div>
+        <div class="upload-section">
+            <input type="file" id="fileInput" webkitdirectory multiple>
+            <button id="uploadBtn">上传</button>
+            <span id="status"></span>
+        </div>
+
+        <div class="filters" id="filters" style="display:none;">
+            <div class="filter-group">
+                <label>实例名称：</label>
+                <select id="instanceSelect" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label>计数名称：</label>
+                <select id="metricSelect" multiple></select>
+            </div>
+            <button id="updateChartBtn">更新图表</button>
+        </div>
+
+        <div id="chart" style="width: 100%; height: 500px;"></div>
     </div>
+
+    <script src="/static/js/dataProcessor.js"></script>
+    <script src="/static/js/chart.js"></script>
+    <script src="/static/js/interactions.js"></script>
     <script src="/static/js/ui.js"></script>
 </body>
 </html>
