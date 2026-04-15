@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const items = parsersList.querySelectorAll('.parser-item');
 
         items.forEach(item => {
+            item.setAttribute('draggable', 'true');
             item.addEventListener('dragstart', handleDragStart);
             item.addEventListener('dragend', handleDragEnd);
             item.addEventListener('dragover', handleDragOver);
@@ -63,15 +64,18 @@ document.addEventListener('DOMContentLoaded', function() {
         draggedItem = this;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.dataset.name);
     }
 
     function handleDragEnd(e) {
         this.classList.remove('dragging');
-        // 移除所有 drag-over 状态
         document.querySelectorAll('.parser-item').forEach(item => {
             item.classList.remove('drag-over');
         });
-        draggedItem = null;
+        // 延迟清空，让 drop 事件先处理
+        setTimeout(() => {
+            draggedItem = null;
+        }, 100);
     }
 
     function handleDragOver(e) {
@@ -87,28 +91,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleDragLeave(e) {
-        this.classList.remove('drag-over');
+        // 只有当真正离开元素时才移除
+        if (this.classList.contains('drag-over')) {
+            this.classList.remove('drag-over');
+        }
     }
 
     function handleDrop(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        if (!draggedItem || this === draggedItem) {
+            this.classList.remove('drag-over');
+            return;
+        }
+
         this.classList.remove('drag-over');
 
-        console.log('Drop fired', { draggedItem, this, isSame: this === draggedItem });
-        if (!draggedItem || this === draggedItem) return;
-
-        // 交换位置
-        const allItems = Array.from(parsersList.querySelectorAll('.parser-item'));
-        const draggedIndex = allItems.indexOf(draggedItem);
-        const dropIndex = allItems.indexOf(this);
-
-        console.log('Swapping', draggedIndex, dropIndex);
-        if (draggedIndex < dropIndex) {
-            this.parentNode.insertBefore(draggedItem, this.nextSibling);
-        } else {
-            this.parentNode.insertBefore(draggedItem, this);
-        }
+        // 直接在这个位置插入
+        parsersList.insertBefore(draggedItem, this);
 
         // 更新优先级
         updatePriorities();
