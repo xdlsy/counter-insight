@@ -25,4 +25,18 @@ def load_parsers():
                 except:
                     pass
 
+    # 按优先级排序（低优先级数字在前）
+    parsers.sort(key=lambda p: p.priority)
     return parsers
+
+def get_parsers_info():
+    """获取解析器信息列表（按优先级排序）"""
+    parsers = load_parsers()
+    return [
+        {
+            'name': p.name,
+            'priority': p.priority,
+            'can_process': p.can_process.__doc__ or ''
+        }
+        for p in parsers
+    ]

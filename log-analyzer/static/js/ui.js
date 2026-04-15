@@ -12,6 +12,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectionInfo = document.getElementById('selectionInfo');
     const dropZone = document.getElementById('dropZone');
     const dataCount = document.getElementById('dataCount');
+    const parsersList = document.getElementById('parsersList');
+
+    // Load parsers list
+    loadParsersList();
+
+    async function loadParsersList() {
+        try {
+            const response = await fetch('/parsers');
+            const result = await response.json();
+
+            if (result.parsers && result.parsers.length > 0) {
+                parsersList.innerHTML = result.parsers.map((parser, index) => `
+                    <div class="parser-item">
+                        <div class="parser-info">
+                            <span class="parser-name">${parser.name}</span>
+                            <span class="parser-priority">优先级: ${parser.priority}</span>
+                        </div>
+                        ${index === 0 ? '<span class="parser-priority-label">最高优先</span>' : ''}
+                    </div>
+                `).join('');
+            } else {
+                parsersList.innerHTML = '<div class="parsers-empty">暂无解析器</div>';
+            }
+        } catch (error) {
+            parsersList.innerHTML = '<div class="parsers-empty">加载失败</div>';
+        }
+    }
 
     let sessionId = null;
     let dataProcessor = null;

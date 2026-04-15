@@ -22,6 +22,12 @@ def not_found(error):
 def index():
     return render_template('index.html')
 
+@app.route('/parsers', methods=['GET'])
+def get_parsers():
+    """获取解析器列表（按优先级排序）"""
+    from scripts import get_parsers_info
+    return jsonify({'parsers': get_parsers_info()})
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:

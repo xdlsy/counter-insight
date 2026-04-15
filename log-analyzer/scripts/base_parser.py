@@ -6,6 +6,7 @@ class BaseParser(ABC):
     """日志解析器基类"""
 
     name = "base"  # 解析器名称
+    priority = 100  # 优先级，数字越小越优先（默认100）
 
     @abstractmethod
     def process(self, file_path: str) -> List[Dict]:

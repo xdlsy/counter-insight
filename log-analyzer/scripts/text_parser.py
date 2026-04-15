@@ -6,6 +6,7 @@ from scripts.base_parser import BaseParser
 
 class TextParser(BaseParser):
     name = "text"
+    priority = 20  # 文本日志解析器优先级次之
 
     # 日志级别正则
     LEVEL_PATTERN = re.compile(r'\b(DEBUG|INFO|WARN|WARNING|ERROR|FATAL|CRITICAL)\b', re.IGNORECASE)

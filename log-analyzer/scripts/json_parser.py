@@ -5,6 +5,7 @@ from scripts.base_parser import BaseParser
 
 class JsonParser(BaseParser):
     name = "json"
+    priority = 10  # JSON 解析器优先级最高
 
     def can_process(self, file_path: str) -> bool:
         return file_path.endswith('.json')
