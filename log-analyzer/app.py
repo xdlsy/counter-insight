@@ -28,6 +28,18 @@ def get_parsers():
     from scripts import get_parsers_info
     return jsonify({'parsers': get_parsers_info()})
 
+@app.route('/parsers', methods=['POST'])
+def update_parsers():
+    """更新解析器优先级"""
+    data = request.json
+    priorities = data.get('priorities', {})
+
+    # 保存优先级到配置文件
+    from scripts import save_parser_priorities
+    save_parser_priorities(priorities)
+
+    return jsonify({'success': True})
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:

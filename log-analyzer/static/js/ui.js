@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (result.parsers && result.parsers.length > 0) {
                 parsersList.innerHTML = result.parsers.map((parser, index) => `
-                    <div class="parser-item">
+                    <div class="parser-item" draggable="true" data-name="${parser.name}" data-priority="${parser.priority}">
                         <div class="parser-info">
                             <span class="parser-name">${parser.name}</span>
                             <span class="parser-priority">优先级: ${parser.priority}</span>
@@ -32,11 +32,122 @@ document.addEventListener('DOMContentLoaded', function() {
                         ${index === 0 ? '<span class="parser-priority-label">最高优先</span>' : ''}
                     </div>
                 `).join('');
+
+                // 添加拖拽事件
+                initDragAndDrop();
             } else {
                 parsersList.innerHTML = '<div class="parsers-empty">暂无解析器</div>';
             }
         } catch (error) {
             parsersList.innerHTML = '<div class="parsers-empty">加载失败</div>';
+        }
+    }
+
+    // 拖拽排序功能
+    let draggedItem = null;
+
+    function initDragAndDrop() {
+        const items = parsersList.querySelectorAll('.parser-item');
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('dragenter', handleDragEnter);
+            item.addEventListener('dragleave', handleDragLeave);
+            item.addEventListener('drop', handleDrop);
+        });
+    }
+
+    function handleDragStart(e) {
+        draggedItem = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+        this.classList.remove('dragging');
+        // 移除所有 drag-over 状态
+        document.querySelectorAll('.parser-item').forEach(item => {
+            item.classList.remove('drag-over');
+        });
+        draggedItem = null;
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        if (this !== draggedItem) {
+            this.classList.add('drag-over');
+        }
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (this === draggedItem) return;
+
+        // 交换位置
+        const allItems = Array.from(parsersList.querySelectorAll('.parser-item'));
+        const draggedIndex = allItems.indexOf(draggedItem);
+        const dropIndex = allItems.indexOf(this);
+
+        if (draggedIndex < dropIndex) {
+            this.parentNode.insertBefore(draggedItem, this.nextSibling);
+        } else {
+            this.parentNode.insertBefore(draggedItem, this);
+        }
+
+        // 更新优先级
+        updatePriorities();
+    }
+
+    async function updatePriorities() {
+        const items = parsersList.querySelectorAll('.parser-item');
+        const priorities = {};
+
+        items.forEach((item, index) => {
+            const name = item.dataset.name;
+            priorities[name] = (index + 1) * 10; // 优先级为 10, 20, 30...
+            item.dataset.priority = priorities[name];
+            item.querySelector('.parser-priority').textContent = `优先级: ${priorities[name]}`;
+        });
+
+        // 重新排列后更新最高优先标签
+        items.forEach((item, index) => {
+            const label = item.querySelector('.parser-priority-label');
+            if (index === 0) {
+                if (!label) {
+                    const span = document.createElement('span');
+                    span.className = 'parser-priority-label';
+                    span.textContent = '最高优先';
+                    item.appendChild(span);
+                }
+            } else {
+                if (label) {
+                    label.remove();
+                }
+            }
+        });
+
+        // 保存到后端
+        try {
+            await fetch('/parsers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ priorities })
+            });
+        } catch (error) {
+            console.error('保存优先级失败:', error);
         }
     }
 
