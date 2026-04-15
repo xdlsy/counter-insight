@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="parser-item" draggable="true" data-name="${parser.name}" data-priority="${parser.priority}">
                         <div class="parser-info">
                             <span class="parser-name">${parser.name}</span>
-                            <span class="parser-priority">优先级: ${parser.priority}</span>
                         </div>
                         ${index === 0 ? '<span class="parser-priority-label">最高优先</span>' : ''}
                     </div>
@@ -152,9 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         items.forEach((item, index) => {
             const name = item.dataset.name;
-            priorities[name] = (index + 1) * 10; // 优先级为 10, 20, 30...
+            priorities[name] = (index + 1) * 10;
             item.dataset.priority = priorities[name];
-            item.querySelector('.parser-priority').textContent = `优先级: ${priorities[name]}`;
         });
 
         // 重新排列后更新最高优先标签
