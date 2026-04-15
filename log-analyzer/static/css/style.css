@@ -283,6 +283,7 @@ body::before {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 16px;
+    align-items: start;
 }
 
 .parsers-panel {
@@ -291,8 +292,8 @@ body::before {
     background: var(--bg-tertiary);
     border-radius: var(--radius-md);
     padding: 16px;
-    max-height: 280px;
-    overflow-y: auto;
+    max-height: none;
+    height: 100%;
 }
 
 .parsers-header {
