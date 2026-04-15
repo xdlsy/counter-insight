@@ -44,78 +44,106 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 拖拽排序功能
-    let draggedItem = null;
+    let draggedElement = null;
+    let dragSourceIndex = -1;
 
     function initDragAndDrop() {
-        const items = parsersList.querySelectorAll('.parser-item');
+        const container = parsersList;
+        const items = container.querySelectorAll('.parser-item');
 
-        items.forEach(item => {
+        items.forEach((item, index) => {
             item.setAttribute('draggable', 'true');
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-            item.addEventListener('dragover', handleDragOver);
-            item.addEventListener('dragenter', handleDragEnter);
-            item.addEventListener('dragleave', handleDragLeave);
-            item.addEventListener('drop', handleDrop);
+            item.dataset.index = index;
+
+            // dragstart
+            item.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                dragSourceIndex = index;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', index);
+                // 隐藏原位置的拖拽元素
+                setTimeout(() => {
+                    this.style.display = 'none';
+                }, 0);
+            });
+
+            // dragend
+            item.addEventListener('dragend', function(e) {
+                this.classList.remove('dragging');
+                this.style.display = '';
+                draggedElement = null;
+                dragSourceIndex = -1;
+                // 清理所有 drag-over
+                items.forEach(i => i.classList.remove('drag-over'));
+            });
+
+            // dragover
+            item.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            });
+
+            // dragenter
+            item.addEventListener('dragenter', function(e) {
+                e.preventDefault();
+                if (this !== draggedElement) {
+                    this.classList.add('drag-over');
+                }
+            });
+
+            // dragleave
+            item.addEventListener('dragleave', function(e) {
+                // 延迟移除，避免快速移动时闪烁
+                setTimeout(() => {
+                    this.classList.remove('drag-over');
+                }, 50);
+            });
+
+            // drop
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                this.classList.remove('drag-over');
+
+                if (!draggedElement || this === draggedElement) return;
+
+                const targetIndex = parseInt(this.dataset.index);
+                const sourceIndex = dragSourceIndex;
+
+                // 移动元素
+                if (targetIndex > sourceIndex) {
+                    this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draggedElement, this);
+                }
+
+                // 重新设置索引
+                const allItems = parsersList.querySelectorAll('.parser-item');
+                allItems.forEach((item, i) => {
+                    item.dataset.index = i;
+                });
+
+                // 更新优先级
+                updatePriorities();
+            });
         });
-    }
 
-    function handleDragStart(e) {
-        draggedItem = this;
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', this.dataset.name);
-    }
-
-    function handleDragEnd(e) {
-        this.classList.remove('dragging');
-        document.querySelectorAll('.parser-item').forEach(item => {
-            item.classList.remove('drag-over');
+        // 容器也需要处理 drop（当拖到末尾时）
+        container.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
         });
-        // 延迟清空，让 drop 事件先处理
-        setTimeout(() => {
-            draggedItem = null;
-        }, 100);
-    }
 
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-    }
-
-    function handleDragEnter(e) {
-        e.preventDefault();
-        if (this !== draggedItem) {
-            this.classList.add('drag-over');
-        }
-    }
-
-    function handleDragLeave(e) {
-        // 只有当真正离开元素时才移除
-        if (this.classList.contains('drag-over')) {
-            this.classList.remove('drag-over');
-        }
-    }
-
-    function handleDrop(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (!draggedItem || this === draggedItem) {
-            this.classList.remove('drag-over');
-            return;
-        }
-
-        this.classList.remove('drag-over');
-
-        // 直接在这个位置插入
-        parsersList.insertBefore(draggedItem, this);
-
-        // 更新优先级
-        updatePriorities();
-
-        // 重新初始化拖拽事件
-        initDragAndDrop();
+        container.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (draggedElement) {
+                // 移动到末尾
+                this.appendChild(draggedElement);
+                updatePriorities();
+            }
+        });
     }
 
     async function updatePriorities() {
