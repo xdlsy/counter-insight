@@ -92,15 +92,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleDrop(e) {
         e.preventDefault();
+        e.stopPropagation();
         this.classList.remove('drag-over');
 
-        if (this === draggedItem) return;
+        console.log('Drop fired', { draggedItem, this, isSame: this === draggedItem });
+        if (!draggedItem || this === draggedItem) return;
 
         // 交换位置
         const allItems = Array.from(parsersList.querySelectorAll('.parser-item'));
         const draggedIndex = allItems.indexOf(draggedItem);
         const dropIndex = allItems.indexOf(this);
 
+        console.log('Swapping', draggedIndex, dropIndex);
         if (draggedIndex < dropIndex) {
             this.parentNode.insertBefore(draggedItem, this.nextSibling);
         } else {
@@ -109,6 +112,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 更新优先级
         updatePriorities();
+
+        // 重新初始化拖拽事件
+        initDragAndDrop();
     }
 
     async function updatePriorities() {
