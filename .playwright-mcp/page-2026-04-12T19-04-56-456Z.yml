@@ -1,0 +1,80 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e8]: Log Analyzer
+    - generic [ref=e9]: 日志计数可视化分析工具
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - heading "上传日志文件" [level=2] [ref=e16]
+      - generic [ref=e17]:
+        - button "Choose File" [ref=e18] [cursor=pointer]
+        - generic:
+          - img
+          - paragraph: 拖拽文件或目录到此处
+          - paragraph: 支持 .log, .txt, .json 文件及 .zip, .tar.gz 压缩包
+          - button "选择目录" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+            - text: 选择目录
+        - generic [ref=e38]:
+          - img [ref=e39]
+          - text: test.json
+      - generic [ref=e26]: 完成
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - img [ref=e44]
+        - heading "数据选择" [level=2] [ref=e47]
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - img [ref=e52]
+              - textbox "搜索实例或计数..." [ref=e55]
+            - generic [ref=e56]:
+              - button "展开/折叠" [ref=e57] [cursor=pointer]:
+                - img [ref=e58]
+              - button "全选" [ref=e60] [cursor=pointer]:
+                - img [ref=e61]
+              - button "清空" [ref=e64] [cursor=pointer]:
+                - img [ref=e65]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e71] [cursor=pointer]:
+                - img [ref=e72]
+                - generic [ref=e75]: api-gateway
+              - generic [ref=e76]:
+                - generic [ref=e77] [cursor=pointer]:
+                  - generic [ref=e79]: requests_success
+                  - generic [ref=e80]: (1条)
+                - generic [ref=e81] [cursor=pointer]:
+                  - generic [ref=e83]: requests_total
+                  - generic [ref=e84]: (1条)
+            - generic [ref=e85]:
+              - generic [ref=e86] [cursor=pointer]:
+                - img [ref=e87]
+                - generic [ref=e90]: db-primary
+              - generic [ref=e92] [cursor=pointer]:
+                - generic [ref=e94]: connections
+                - generic [ref=e95]: (1条)
+            - generic [ref=e96]:
+              - generic [ref=e97] [cursor=pointer]:
+                - img [ref=e98]
+                - generic [ref=e101]: redis-cache
+              - generic [ref=e103] [cursor=pointer]:
+                - generic [ref=e105]: cache_hits
+                - generic [ref=e106]: (1条)
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: 已选择
+            - generic [ref=e111]: 0 项
+          - generic [ref=e113]: 请从左侧选择数据
+    - generic [ref=e28]:
+      - img [ref=e29]
+      - heading "趋势图表" [level=2] [ref=e30]
+      - generic [ref=e31]: 4 条数据
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]: Log Analyzer
+    - generic [ref=e35]: "|"
+    - generic [ref=e36]: 数据驱动洞察

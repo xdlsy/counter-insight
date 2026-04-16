@@ -1,0 +1,10 @@
+{"instance":"api-gateway","requests_total":100,"requests_success":95,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"db-primary","connections":50,"queries":500,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"api-gateway","requests_total":110,"requests_success":104,"timestamp":"2026-04-11 01:00:00"}
+{"instance":"db-primary","connections":55,"queries":550,"timestamp":"2026-04-11 01:00:00"}
+{"instance":"api-gateway","requests_total":120,"requests_success":113,"timestamp":"2026-04-11 02:00:00"}
+{"instance":"db-primary","connections":60,"queries":600,"timestamp":"2026-04-11 02:00:00"}
+{"instance":"api-gateway","requests_total":130,"requests_success":122,"timestamp":"2026-04-11 03:00:00"}
+{"instance":"db-primary","connections":65,"queries":650,"timestamp":"2026-04-11 03:00:00"}
+{"instance":"api-gateway","requests_total":140,"requests_success":131,"timestamp":"2026-04-11 04:00:00"}
+{"instance":"db-primary","connections":70,"queries":700,"timestamp":"2026-04-11 04:00:00"}

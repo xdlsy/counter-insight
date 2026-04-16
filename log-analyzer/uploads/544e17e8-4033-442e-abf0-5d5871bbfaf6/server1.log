@@ -1,0 +1,7 @@
+2024-01-01 10:00:00 INFO Server started
+2024-01-01 10:00:01 DEBUG Connection received
+2024-01-01 10:00:02 INFO Request processed
+2024-01-01 10:00:03 WARN High memory usage
+2024-01-01 10:00:04 ERROR Connection failed
+2024-01-01 10:00:05 INFO Retry successful
+2024-01-01 10:00:06 DEBUG Closing connection

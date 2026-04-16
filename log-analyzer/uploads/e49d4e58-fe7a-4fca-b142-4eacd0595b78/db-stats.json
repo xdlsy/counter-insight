@@ -1,0 +1,4 @@
+{"instance": "db-primary", "connections_active": 25, "queries_total": 500, "queries_slow": 8, "timestamp": "2024-01-01 10:00:00"}
+{"instance": "db-primary", "connections_active": 28, "queries_total": 520, "queries_slow": 5, "timestamp": "2024-01-01 10:01:00"}
+{"instance": "db-primary", "connections_active": 30, "queries_total": 550, "queries_slow": 12, "timestamp": "2024-01-01 10:02:00"}
+{"instance": "db-primary", "connections_active": 22, "queries_total": 480, "queries_slow": 3, "timestamp": "2024-01-01 10:03:00"}

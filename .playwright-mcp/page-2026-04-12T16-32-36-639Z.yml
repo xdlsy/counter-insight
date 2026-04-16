@@ -1,0 +1,22 @@
+- generic [ref=e1]:
+  - heading "日志分析工具" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button "Choose File" [ref=e5]
+      - button "Choose File" [ref=e6]
+      - button "上传" [active] [ref=e7] [cursor=pointer]
+      - generic [ref=e9]: 完成
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: 实例名称：
+        - listbox [ref=e13]:
+          - option "server2.log" [ref=e14]
+          - option "server1.log" [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]: 计数名称：
+        - listbox [ref=e18]:
+          - option "INFO_count" [ref=e19]
+          - option "DEBUG_count" [ref=e20]
+          - option "WARN_count" [ref=e21]
+          - option "ERROR_count" [ref=e22]
+      - button "更新图表" [ref=e23] [cursor=pointer]

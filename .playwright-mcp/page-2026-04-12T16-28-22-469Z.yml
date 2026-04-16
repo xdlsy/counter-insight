@@ -1,0 +1,5 @@
+- generic [active] [ref=e1]:
+  - heading "日志分析工具" [level=1] [ref=e2]
+  - generic [ref=e4]:
+    - button "Choose File" [ref=e5]
+    - button "上传" [ref=e6] [cursor=pointer]

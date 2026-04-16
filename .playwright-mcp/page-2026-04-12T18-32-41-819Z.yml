@@ -1,0 +1,29 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e8]: Log Analyzer
+    - generic [ref=e9]: 日志计数可视化分析工具
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - heading "上传日志文件" [level=2] [ref=e16]
+      - generic [ref=e17]:
+        - button "Choose File" [ref=e18] [cursor=pointer]
+        - generic:
+          - img
+          - paragraph: 拖拽文件或目录到此处
+          - paragraph: 支持 .log, .txt, .json 文件及 .zip, .tar.gz 压缩包
+          - button "选择目录" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+            - text: 选择目录
+      - generic [ref=e26]: 等待上传...
+    - generic [ref=e28]:
+      - img [ref=e29]
+      - heading "趋势图表" [level=2] [ref=e30]
+      - generic [ref=e31]: 0 条数据
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]: Log Analyzer
+    - generic [ref=e35]: "|"
+    - generic [ref=e36]: 数据驱动洞察

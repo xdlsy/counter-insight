@@ -1,0 +1,10 @@
+{"instance":"api-gateway","requests_total":100,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"api-gateway","requests_total":110,"timestamp":"2026-04-11 01:00:00"}
+{"instance":"api-gateway","requests_total":120,"timestamp":"2026-04-11 02:00:00"}
+{"instance":"api-gateway","requests_total":130,"timestamp":"2026-04-11 03:00:00"}
+{"instance":"api-gateway","requests_total":140,"timestamp":"2026-04-11 04:00:00"}
+{"instance":"api-gateway","requests_total":150,"timestamp":"2026-04-11 05:00:00"}
+{"instance":"api-gateway","requests_total":160,"timestamp":"2026-04-11 06:00:00"}
+{"instance":"api-gateway","requests_total":170,"timestamp":"2026-04-11 07:00:00"}
+{"instance":"api-gateway","requests_total":180,"timestamp":"2026-04-11 08:00:00"}
+{"instance":"api-gateway","requests_total":190,"timestamp":"2026-04-11 09:00:00"}

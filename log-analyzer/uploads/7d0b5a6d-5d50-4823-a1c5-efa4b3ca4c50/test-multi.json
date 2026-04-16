@@ -1,0 +1,4 @@
+{"instance":"api-gateway","requests_total":120,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"api-gateway","requests_success":115,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"db-primary","connections":25,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"db-primary","queries":500,"timestamp":"2026-04-11 00:00:00"}

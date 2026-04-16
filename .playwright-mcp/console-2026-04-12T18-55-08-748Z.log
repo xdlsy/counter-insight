@@ -1,0 +1,10 @@
+[      56ms] [ERROR] Failed to load resource: the server responded with a status of 404 (NOT FOUND) @ http://127.0.0.1:5000/favicon.ico:0
+[   33299ms] [LOG] 初始 class: tree-instance expanded @ :6
+[   33299ms] [LOG] 按钮文字 span: no span @ :7
+[   33301ms] TypeError: Cannot set properties of null (setting 'textContent')
+    at HTMLButtonElement.<anonymous> (http://127.0.0.1:5000/static/js/ui.js:380:51)
+    at eval (eval at evaluate (:302:30), <anonymous>:11:13)
+    at UtilityScript.evaluate (<anonymous>:304:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[   33401ms] [LOG] 点击后 class: tree-instance expanded @ :13
+[   33401ms] [LOG] 按钮文字 span: no span @ :14

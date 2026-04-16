@@ -1,0 +1,4 @@
+{"instance":"api-gateway","requests_total":100,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"api-gateway","requests_success":95,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"db-primary","connections":50,"timestamp":"2026-04-11 00:00:00"}
+{"instance":"redis-cache","cache_hits":200,"timestamp":"2026-04-11 00:00:00"}

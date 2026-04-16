@@ -1,0 +1,107 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e8]: Log Analyzer
+    - generic [ref=e9]: 日志计数可视化分析工具
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - heading "上传日志文件" [level=2] [ref=e16]
+      - generic [ref=e17]:
+        - button "Choose File" [ref=e18] [cursor=pointer]
+        - generic:
+          - img
+          - paragraph: 拖拽文件或目录到此处
+          - paragraph: 支持 .log, .txt, .json 文件及 .zip, .tar.gz 压缩包
+          - button "选择目录" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+            - text: 选择目录
+        - generic [ref=e95]:
+          - img [ref=e96]
+          - text: test.json
+      - generic [ref=e26]: 完成
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - img [ref=e44]
+        - heading "数据选择" [level=2] [ref=e47]
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - img [ref=e52]
+              - textbox "搜索实例或计数..." [ref=e55]
+            - generic [ref=e56]:
+              - button "展开/折叠" [ref=e57] [cursor=pointer]:
+                - img [ref=e58]
+              - button "全选" [ref=e60] [cursor=pointer]:
+                - img [ref=e61]
+              - button "清空" [ref=e64] [cursor=pointer]:
+                - img [ref=e65]
+          - generic [ref=e69]:
+            - generic [ref=e99]:
+              - generic [ref=e100] [cursor=pointer]:
+                - img [ref=e101]
+                - generic [ref=e103]: ✓
+                - generic [ref=e104]: api-gateway
+              - generic [ref=e105]:
+                - generic [ref=e106] [cursor=pointer]:
+                  - generic [ref=e107]: ✓
+                  - generic [ref=e108]: requests_success
+                  - generic [ref=e109]: (5条)
+                - generic [ref=e110] [cursor=pointer]:
+                  - generic [ref=e111]: ✓
+                  - generic [ref=e112]: requests_total
+                  - generic [ref=e113]: (5条)
+            - generic [ref=e114]:
+              - generic [ref=e115] [cursor=pointer]:
+                - img [ref=e116]
+                - generic [ref=e118]: ✓
+                - generic [ref=e119]: db-primary
+              - generic [ref=e120]:
+                - generic [ref=e121] [cursor=pointer]:
+                  - generic [ref=e122]: ✓
+                  - generic [ref=e123]: connections
+                  - generic [ref=e124]: (5条)
+                - generic [ref=e125] [cursor=pointer]:
+                  - generic [ref=e126]: ✓
+                  - generic [ref=e127]: queries
+                  - generic [ref=e128]: (5条)
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]: 已选择
+            - generic [ref=e85]: 4 项
+          - generic [ref=e86]:
+            - generic [ref=e129]:
+              - generic [ref=e130]: api-gateway / requests_total
+              - generic "显示差值（与前一时间点的差值）" [ref=e131] [cursor=pointer]:
+                - checkbox "差值" [checked] [ref=e132]
+                - generic [ref=e133]: 差值
+              - generic [ref=e134] [cursor=pointer]: ×
+            - generic [ref=e135]:
+              - generic [ref=e136]: api-gateway / requests_success
+              - generic "显示差值（与前一时间点的差值）" [ref=e137] [cursor=pointer]:
+                - checkbox "差值" [checked] [ref=e138]
+                - generic [ref=e139]: 差值
+              - generic [ref=e140] [cursor=pointer]: ×
+            - generic [ref=e141]:
+              - generic [ref=e142]: db-primary / connections
+              - generic "显示差值（与前一时间点的差值）" [ref=e143] [cursor=pointer]:
+                - checkbox "差值" [checked] [ref=e144]
+                - generic [ref=e145]: 差值
+              - generic [ref=e146] [cursor=pointer]: ×
+            - generic [ref=e147]:
+              - generic [ref=e148]: db-primary / queries
+              - generic "显示差值（与前一时间点的差值）" [ref=e149] [cursor=pointer]:
+                - checkbox "差值" [checked] [ref=e150]
+                - generic [ref=e151]: 差值
+              - generic [ref=e152] [cursor=pointer]: ×
+    - generic [ref=e28]:
+      - img [ref=e29]
+      - heading "趋势图表" [level=2] [ref=e30]
+      - generic [ref=e31]: 20 条数据
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]: Log Analyzer
+    - generic [ref=e35]: "|"
+    - generic [ref=e36]: 数据驱动洞察

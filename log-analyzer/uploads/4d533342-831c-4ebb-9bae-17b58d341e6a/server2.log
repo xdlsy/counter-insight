@@ -1,0 +1,8 @@
+2024-01-01 10:00:00 INFO Application started
+2024-01-01 10:00:01 DEBUG Loading configuration
+2024-01-01 10:00:02 WARN Config file not found, using defaults
+2024-01-01 10:00:03 INFO Initialization complete
+2024-01-01 10:00:04 ERROR Database connection timeout
+2024-01-01 10:00:05 WARN Retry attempt 1
+2024-01-01 10:00:06 ERROR Retry attempt 2
+2024-01-01 10:00:07 INFO Database connected

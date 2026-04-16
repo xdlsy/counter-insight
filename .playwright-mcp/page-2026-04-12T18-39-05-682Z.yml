@@ -1,0 +1,71 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e8]: Log Analyzer
+    - generic [ref=e9]: 日志计数可视化分析工具
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - heading "上传日志文件" [level=2] [ref=e16]
+      - generic [ref=e17]:
+        - button "Choose File" [ref=e18] [cursor=pointer]
+        - generic:
+          - img
+          - paragraph: 拖拽文件或目录到此处
+          - paragraph: 支持 .log, .txt, .json 文件及 .zip, .tar.gz 压缩包
+          - button "选择目录" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+            - text: 选择目录
+        - generic [ref=e38]:
+          - img [ref=e39]
+          - text: test-multi.json
+      - generic [ref=e26]: 完成
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - img [ref=e44]
+        - heading "数据选择" [level=2] [ref=e47]
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - img [ref=e51]
+            - textbox "搜索实例或计数..." [ref=e54]
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57] [cursor=pointer]:
+                - img [ref=e58]
+                - generic [ref=e60]: ✓
+                - generic [ref=e61]: api-gateway
+              - text: ✓ ✓
+            - generic [ref=e62]:
+              - generic [ref=e63] [cursor=pointer]:
+                - img [ref=e64]
+                - generic [ref=e66]: ✓
+                - generic [ref=e67]: db-primary
+              - text: ✓ ✓
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]: 已选择
+            - generic [ref=e72]: 4 项
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: api-gateway / requests_success
+              - generic [ref=e76] [cursor=pointer]: ×
+            - generic [ref=e77]:
+              - generic [ref=e78]: api-gateway / requests_total
+              - generic [ref=e79] [cursor=pointer]: ×
+            - generic [ref=e80]:
+              - generic [ref=e81]: db-primary / connections
+              - generic [ref=e82] [cursor=pointer]: ×
+            - generic [ref=e83]:
+              - generic [ref=e84]: db-primary / queries
+              - generic [ref=e85] [cursor=pointer]: ×
+    - generic [ref=e28]:
+      - img [ref=e29]
+      - heading "趋势图表" [level=2] [ref=e30]
+      - generic [ref=e31]: 4 条数据
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]: Log Analyzer
+    - generic [ref=e35]: "|"
+    - generic [ref=e36]: 数据驱动洞察

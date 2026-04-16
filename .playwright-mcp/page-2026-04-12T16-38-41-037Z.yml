@@ -1,0 +1,31 @@
+- generic [ref=e1]:
+  - heading "日志分析工具" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button "Choose File" [ref=e5]
+      - button "Choose File" [ref=e6]
+      - button "上传" [active] [ref=e7] [cursor=pointer]
+      - generic [ref=e9]: 完成
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: 实例名称：
+        - listbox [ref=e13]:
+          - option "server-app.log" [ref=e14]
+          - option "worker.log" [ref=e15]
+          - option "api-gateway" [ref=e16]
+          - option "db-primary" [ref=e17]
+      - generic [ref=e18]:
+        - generic [ref=e19]: 计数名称：
+        - listbox [ref=e20]:
+          - option "INFO_count" [ref=e21]
+          - option "DEBUG_count" [ref=e22]
+          - option "WARN_count" [ref=e23]
+          - option "ERROR_count" [ref=e24]
+          - option "requests_total" [ref=e25]
+          - option "requests_success" [ref=e26]
+          - option "requests_failed" [ref=e27]
+          - option "latency_avg" [ref=e28]
+          - option "connections_active" [ref=e29]
+          - option "queries_total" [ref=e30]
+          - option "queries_slow" [ref=e31]
+      - button "更新图表" [ref=e32] [cursor=pointer]

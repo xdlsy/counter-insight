@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="parser-info">
                             <span class="parser-name">${parser.name}</span>
                         </div>
-                        ${index === 0 ? '<span class="parser-priority-label">最高优先</span>' : ''}
                     </div>
                 `).join('');
 
@@ -153,23 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = item.dataset.name;
             priorities[name] = (index + 1) * 10;
             item.dataset.priority = priorities[name];
-        });
-
-        // 重新排列后更新最高优先标签
-        items.forEach((item, index) => {
-            const label = item.querySelector('.parser-priority-label');
-            if (index === 0) {
-                if (!label) {
-                    const span = document.createElement('span');
-                    span.className = 'parser-priority-label';
-                    span.textContent = '最高优先';
-                    item.appendChild(span);
-                }
-            } else {
-                if (label) {
-                    label.remove();
-                }
-            }
         });
 
         // 保存到后端
