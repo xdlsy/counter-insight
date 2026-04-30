@@ -1,0 +1,5 @@
+2026-04-17 11:00:00 INFO Service initialized
+2026-04-17 11:00:30 DEBUG Health check passed
+2026-04-17 11:01:00 WARN Memory usage high (85%)
+2026-04-17 11:02:00 INFO Cache cleared
+2026-04-17 11:03:00 ERROR Service crashed

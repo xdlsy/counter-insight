@@ -5,7 +5,17 @@ import tarfile
 import shutil
 from pathlib import Path
 
-ALLOWED_EXTENSIONS = {'log', 'txt', 'log.1', 'log.2'}
+def is_log_file(filename):
+    """检查是否为日志文件（包括带编号的日志如 .log.1, .log.99）"""
+    name = filename.lower()
+    # 匹配 .log 或 .log.xxx 格式
+    if name.endswith('.log'):
+        return True
+    # 匹配 .log.数字 格式（如 app.log.1, error.log.99）
+    import re
+    if re.match(r'.+\.log\.\d+$', name):
+        return True
+    return False
 
 def is_compressed(file_path):
     """检查文件是否为压缩包"""
@@ -39,26 +49,24 @@ def process_directory(folder_path):
         if not f.is_file():
             continue
 
+        # 跳过隐藏文件
+        if f.name.startswith('.'):
+            continue
+
         if is_compressed(str(f)):
             # 压缩包，解压到同目录
             parent = f.parent
             extract_all(str(f), str(parent))
-        else:
-            ext = f.suffix.lstrip('.')
-            # 纯文本文件
-            if ext in ALLOWED_EXTENSIONS or f.name.startswith('.'):
-                continue
-            text_files.append(str(f))
 
     # 递归直到没有压缩包
     has_compressed = any(is_compressed(str(f)) for f in Path(folder_path).rglob('*') if f.is_file())
     if has_compressed:
         return process_directory(folder_path)
 
-    # 获取所有纯文本文件
+    # 获取所有纯文本文件（排除隐藏文件和压缩包）
     text_files = []
     for f in Path(folder_path).rglob('*'):
-        if f.is_file() and not is_compressed(str(f)):
+        if f.is_file() and not f.name.startswith('.') and not is_compressed(str(f)):
             text_files.append(str(f))
 
     return text_files

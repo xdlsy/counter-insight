@@ -1,0 +1,5 @@
+{"instance": "api-gateway", "requests_total": 150, "requests_success": 145, "requests_failed": 5, "latency_avg": 120, "timestamp": "2024-01-01 10:00:00"}
+{"instance": "api-gateway", "requests_total": 180, "requests_success": 175, "requests_failed": 5, "latency_avg": 115, "timestamp": "2024-01-01 10:01:00"}
+{"instance": "api-gateway", "requests_total": 200, "requests_success": 190, "requests_failed": 10, "latency_avg": 130, "timestamp": "2024-01-01 10:02:00"}
+{"instance": "api-gateway", "requests_total": 160, "requests_success": 155, "requests_failed": 5, "latency_avg": 110, "timestamp": "2024-01-01 10:03:00"}
+{"instance": "api-gateway", "requests_total": 220, "requests_success": 210, "requests_failed": 10, "latency_avg": 125, "timestamp": "2024-01-01 10:04:00"}

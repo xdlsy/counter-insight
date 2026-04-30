@@ -1,0 +1,11 @@
+2026-04-17 10:00:00 INFO Application started
+2026-04-17 10:00:05 DEBUG Loading configuration
+2026-04-17 10:00:10 INFO Configuration loaded successfully
+2026-04-17 10:01:00 ERROR Connection timeout
+2026-04-17 10:01:05 WARN Retrying connection...
+2026-04-17 10:01:10 INFO Connection restored
+2026-04-17 10:02:00 INFO Processing request ID=001
+2026-04-17 10:02:05 DEBUG Request parameters validated
+2026-04-17 10:02:10 INFO Response sent for request ID=001
+2026-04-17 10:03:00 ERROR Database query failed
+2026-04-17 10:03:05 FATAL System shutdown initiated

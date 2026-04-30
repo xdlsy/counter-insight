@@ -60,11 +60,34 @@ def load_parsers():
 def get_parsers_info():
     """获取解析器信息列表（按优先级排序）"""
     parsers = load_parsers()
+    script_dir = Path(__file__).parent
+
     return [
         {
             'name': p.name,
             'priority': p.priority,
-            'can_process': p.can_process.__doc__ or ''
+            'can_process': p.can_process.__doc__ or '',
+            'file_path': get_parser_file_path(p.name)
         }
         for p in parsers
     ]
+
+def get_parser_file_path(name):
+    """根据解析器名称获取对应的文件路径"""
+    script_dir = Path(__file__).parent
+    # 解析器文件命名规则: *_parser.py
+    for file in script_dir.glob('*_parser.py'):
+        if file.name == 'base_parser.py':
+            continue
+        module_name = file.stem
+        try:
+            module = importlib.import_module(f'scripts.{module_name}')
+            for attr_name in dir(module):
+                attr = getattr(module, attr_name)
+                if isinstance(attr, type) and issubclass(attr, BaseParser) and attr.__name__ != 'BaseParser':
+                    parser = attr()
+                    if parser.name == name:
+                        return str(file.absolute())
+        except:
+            pass
+    return None

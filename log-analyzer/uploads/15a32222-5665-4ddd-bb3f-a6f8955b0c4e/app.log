@@ -1,0 +1,5 @@
+2026-04-17 12:00:00 INFO Application boot
+2026-04-17 12:00:15 DEBUG Config: debug=true
+2026-04-17 12:00:30 INFO Server listening on port 8080
+2026-04-17 12:01:00 INFO First request received
+2026-04-17 12:02:00 WARN Slow response time (500ms)
